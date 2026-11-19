@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ event.title or 'Карточка события' }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css.css') }}">
+</head>
+<body>
+
+    <header>
+        <h1>Событиыъйа</h1>
+        <nav>
+            <a href="/">На главную</a>
+            {% if current_user and current_user.role == 'студент' %}
+                | <a href="/my-events">Мои записи</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <hr>
+
+    <main>
+        {% if message %}
+            <p><strong>Уведомление:</strong> {{ message }}</p>
+            <hr>
+        {% endif %}
+
+        <article>
+            <h2>{{ event.title or 'Без названия' }}</h2>
+            <p><strong>Код события:</strong> {{ event.code }}</p>
+            <p><strong>Категория:</strong> {{ event.category_name }}</p>
+            <p><strong>Дата и время:</strong> {{ event.starts_at.strftime('%d.%m.%Y %H:%M') }}</p>
+            <p><strong>Кабинет:</strong> {{ event.cabinet_name }}</p>
+            <p><strong>Организатор:</strong> {{ event.organizer_name or event.organizer_email or 'Не указан' }}</p>
+            <p><strong>Свободных мест:</strong> {{ event.available_seats }} из {{ event.capacity }}</p>
+            <p><strong>Описание:</strong><br>{{ event.description or 'Нет описания' }}</p>
+        </article>
+
+        <hr>
+
+        <section>
+            {% if not current_user %}
+                <p>Вы просматриваете страницу как гость. <a href="/login">Войдите</a> в аккаунт студента, чтобы записаться.</p>
+            {% elif current_user.role == 'студент' %}
+                {% if is_registered %}
+                    <p><strong>Статус:</strong> Вы уже записаны на это событие.</p>
+                    <form action="/event/{{ event.event_id }}" method="POST">
+                        <input type="hidden" name="action" value="cancel">
+                        <button type="submit">Отменить запись</button>
+                    </form>
+                {% elif event.available_seats > 0 %}
+                    <form action="/event/{{ event.event_id }}" method="POST">
+                        <input type="hidden" name="action" value="register">
+                        <button type="submit">Записаться</button>
+                    </form>
+                {% else %}
+                    <p>Регистрация закрыта: свободных мест нет.</p>
+                {% endif %}
+            {% else %}
+                <p>Запись на события доступна только пользователям с ролью «студент».</p>
+            {% endif %}
+        </section>
+    </main>
+
+</body>
+</html>

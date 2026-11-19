@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои мероприятия</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css.css') }}">
+</head>
+<body>
+
+    <header>
+        <h1>Мои мероприятия</h1>
+        <nav>
+            <ul>
+                <li><a href="/">На главную</a></li>
+                <li><a href="/organizer/create">Создать событие</a></li>
+                <li><a href="/logout">Выход</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <hr>
+
+    <main>
+        {% if events %}
+            {% for ev in events %}
+                <article>
+                    <h3>{{ ev.title or 'Без названия' }} ({{ ev.code }})</h3>
+                    <p><strong>Категория:</strong> {{ ev.category_name }}</p>
+                    <p><strong>Дата и время:</strong> {{ ev.starts_at.strftime('%d.%m.%Y %H:%M') if ev.starts_at else 'Не указано' }}</p>
+                    <p><strong>Кабинет:</strong> {{ ev.cabinet_name }}</p>
+                    <p><strong>Записалось:</strong> {{ ev.booked_count }} из {{ ev.capacity }}</p>
+
+                    <p>
+                        <a href="/organizer/participants/{{ ev.event_id }}">Список участников</a> |
+                        <a href="/organizer/edit/{{ ev.event_id }}">Редактировать</a>
+                    </p>
+
+                    <form action="/organizer/delete/{{ ev.event_id }}" method="POST" style="background: none; border: none; padding: 0;">
+                        <button type="submit">Удалить событие</button>
+                    </form>
+                </article>
+            {% endfor %}
+        {% else %}
+            <p>Вы ещё не создали ни одного события. <a href="/organizer/create">Создать первое событие</a>.</p>
+        {% endif %}
+    </main>
+
+</body>
+</html>

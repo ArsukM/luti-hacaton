@@ -1,0 +1,13 @@
+бд - ars_hacaton
+
+flask
+pyodbc
+ 
+DRIVER = {ODBC Driver 18 for SQL Server}
+
+CONNECTION_STRING = (
+    f'DRIVER={{ODBC Driver 18 for SQL Server}};'
+    f'SERVER={SERVER_NAME};'
+    f'DATABASE={ars_hacaton};'
+    f'Trusted_Connection=yes;'
+)

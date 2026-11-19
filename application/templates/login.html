@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css.css') }}">
+</head>
+<body>
+
+    <header>
+        <h1>Вход</h1>
+        <nav>
+            <a href="/">На главную</a> | <a href="/register">Регистрация</a>
+        </nav>
+    </header>
+
+    <hr>
+
+    <main>
+        {% if error %}
+            <p><strong>Ошибка:</strong> {{ error }}</p>
+        {% endif %}
+
+        <form action="/login" method="POST">
+            <div>
+                <label for="email">Электронная почта:</label><br>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <br>
+            <button type="submit">Войти</button>
+        </form>
+
+        <section>
+            <p style="color: #ffffff;">Никита просто супер молодец</p>
+        </section>
+    </main>
+
+</body>
+</html>

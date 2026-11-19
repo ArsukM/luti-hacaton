@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои записи</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css.css') }}">
+</head>
+<body>
+
+    <header>
+        <h1>Мои записи на события</h1>
+        <nav>
+            <a href="/">На главную</a> | <a href="/logout">Выход</a>
+        </nav>
+    </header>
+
+    <hr>
+
+    <main>
+        {% if events %}
+            {% for event in events %}
+                <article>
+                    <h3><a href="/event/{{ event.event_id }}">{{ event.title or 'Без названия' }}</a></h3>
+                    <p><strong>Категория:</strong> {{ event.category_name }}</p>
+                    <p><strong>Дата проведения:</strong> {{ event.starts_at.strftime('%d.%m.%Y %H:%M') }}</p>
+                    <p><strong>Кабинет:</strong> {{ event.cabinet_name }}</p>
+                    <p><strong>Дата вашей записи:</strong> {{ event.registered_at.strftime('%d.%m.%Y %H:%M') }}</p>
+                    <a href="/event/{{ event.event_id }}">Перейти к событию / отменить запись</a>
+                </article>
+                <hr>
+            {% endfor %}
+        {% else %}
+            <p>Вы пока не записаны ни на одно событие. <a href="/">Посмотреть список грядущих событий</a>.</p>
+        {% endif %}
+    </main>
+
+</body>
+</html>

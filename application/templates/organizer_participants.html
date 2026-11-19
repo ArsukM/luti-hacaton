@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Участники события</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css.css') }}">
+</head>
+<body>
+
+    <header>
+        <h1>Участники: {{ event.title or event.code }}</h1>
+        <nav>
+            <ul>
+                <li><a href="/organizer/events">Назад к списку мероприятий</a></li>
+                <li><a href="/">На главную</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <hr>
+
+    <main>
+        {% if participants %}
+            <p>Всего записалось: <strong>{{ participants|length }}</strong> из {{ event.capacity }}</p>
+            {% for p in participants %}
+                <article>
+                    <p><strong>ФИО:</strong> {{ p.second_name or '' }} {{ p.first_name or '' }} {{ p.middle_name or '' }}</p>
+                    <p><strong>Группа:</strong> {{ p.group_name or 'Не указана' }}</p>
+                    <p><strong>Email:</strong> {{ p.user_mail }}</p>
+                    <p><strong>Время записи:</strong> {{ p.registered_at.strftime('%d.%m.%Y %H:%M') if p.registered_at else '' }}</p>
+                </article>
+            {% endfor %}
+        {% else %}
+            <p>На это событие пока никто не записался.</p>
+        {% endif %}
+    </main>
+
+</body>
+</html>

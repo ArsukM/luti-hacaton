@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ 'Редактирование события' if event else 'Создание события' }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css.css') }}">
+</head>
+<body>
+
+    <header>
+        <h1>{{ 'Редактирование события' if event else 'Создание события' }}</h1>
+        <nav>
+            <ul>
+                <li><a href="/">На главную</a></li>
+                <li><a href="/organizer/events">Мои мероприятия</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <hr>
+
+    <main>
+        {% if error %}
+            <p><strong>Ошибка:</strong> {{ error }}</p>
+        {% endif %}
+
+        <form method="POST">
+            <div>
+                <label for="title">Название *:</label><br>
+                <input type="text" id="title" name="title" value="{{ event.title if event else '' }}" required>
+            </div>
+            <br>
+            <div>
+                <label for="category_id">Категория *:</label><br>
+                <select id="category_id" name="category_id" required>
+                    {% for cat in categories %}
+                        {% if event and event.fk_category == cat.category_id %}
+                            <option value="{{ cat.category_id }}" selected>{{ cat.category_name }}</option>
+                        {% else %}
+                            <option value="{{ cat.category_id }}">{{ cat.category_name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <br>
+            <div>
+                <label for="starts_at">Дата и время начала *:</label><br>
+                <input type="datetime-local" id="starts_at" name="starts_at" value="{{ event.starts_at.strftime('%Y-%m-%dT%H:%M') if event and event.starts_at else '' }}" required>
+            </div>
+            <br>
+            <div>
+                <label for="cabinet_id">Кабинет *:</label><br>
+                <select id="cabinet_id" name="cabinet_id" required>
+                    {% for cab in cabinets %}
+                        {% if event and event.fk_cabinet == cab.cabinet_id %}
+                            <option value="{{ cab.cabinet_id }}" selected>{{ cab.cabinet_name }}</option>
+                        {% else %}
+                            <option value="{{ cab.cabinet_id }}">{{ cab.cabinet_name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <br>
+            <div>
+                <label for="capacity">Количество мест *:</label><br>
+                <input type="number" id="capacity" name="capacity" min="1" value="{{ event.capacity if event else '30' }}" required>
+            </div>
+            <br>
+            <div>
+                <label for="description">Описание:</label><br>
+                <textarea id="description" name="description" rows="4">{{ event.description if event else '' }}</textarea>
+            </div>
+            <br>
+            <button type="submit">{{ 'Сохранить изменения' if event else 'Создать событие' }}</button>
+        </form>
+    </main>
+
+</body>
+</html>

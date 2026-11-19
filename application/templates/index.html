@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Люти хтмл хакатончик (загаловог)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css.css') }}">
+</head>
+<body>
+
+    <header>
+        <h1>Никита молодец :3</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Главная</a></li>
+                {% if current_user %}
+                    {% if current_user.role == 'студент' %}
+                        <li><a href="/my-events">Мои записи</a></li>
+                    {% elif current_user.role == 'организатор' %}
+                        <li><a href="/organizer/events">Мои мероприятия</a></li>
+                        <li><a href="/organizer/create">Создать событие</a></li>
+                    {% endif %}
+                    <li><span>Профиль: {{ current_user.name }} ({{ current_user.role }})</span></li>
+                    <li><a href="/logout">Выход</a></li>
+                {% else %}
+                    <li><span>Статус: Гость</span></li>
+                    <li><a href="/login">Вход</a></li>
+                    <li><a href="/register">Регистрация</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <hr>
+
+    <main>
+        <section>
+            <h2>Фильтр событий</h2>
+            <form action="/" method="GET">
+                <label for="search">Поиск:</label>
+                <input type="text" id="search" name="q" value="{{ search_q }}">
+
+                <label for="category">Категория:</label>
+                <select id="category" name="category">
+                    <option value="">Все</option>
+                    {% for cat in categories %}
+                        {% if selected_category == cat.category_id %}
+                            <option value="{{ cat.category_id }}" selected>{{ cat.category_name }}</option>
+                        {% else %}
+                            <option value="{{ cat.category_id }}">{{ cat.category_name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+
+                <label for="date">Дата:</label>
+                <input type="date" id="date" name="date" value="{{ search_date }}">
+
+                <button type="submit">Применить</button>
+                <a href="/">Сброс</a>
+            </form>
+        </section>
+
+        <hr>
+
+        <section>
+            <h2>Грядущие события</h2>
+
+            {% if events %}
+                {% for event in events %}
+                    <article>
+                        <h3>{{ event.title or 'Без названия' }} ({{ event.category_name }})</h3>
+                        <p><strong>Дата и время:</strong> {{ event.starts_at.strftime('%d.%m.%Y %H:%M') }}</p>
+                        <p><strong>Кабинет:</strong> {{ event.cabinet_name }}</p>
+                        <p><strong>Места:</strong> {{ event.available_seats }} из {{ event.capacity }}</p>
+                        <p>{{ event.description or 'Нет описания' }}</p>
+
+                        {% if current_user %}
+                            <a href="/event/{{ event.event_id }}">Открыть карточку события</a>
+                        {% else %}
+                            <p><a href="/login">Войдите</a> или <a href="/register">зарегистрируйтесь</a>, чтобы записаться.</p>
+                        {% endif %}
+                    </article>
+                {% endfor %}
+            {% else %}
+                <p>Список пуст.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <p>Подвал сайта (ну ладно-ладно, Федя тоже легенда)</p>
+    </footer>
+
+</body>
+</html>

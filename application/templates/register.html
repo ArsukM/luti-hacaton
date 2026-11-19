@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css.css') }}">
+</head>
+<body>
+
+    <header>
+        <h1>Регистрация</h1>
+        <nav>
+            <a href="/">На главную</a> | <a href="/login">Вход</a>
+        </nav>
+    </header>
+
+    <hr>
+
+    <main>
+        {% if error %}
+            <p><strong>Ошибка:</strong> {{ error }}</p>
+        {% endif %}
+
+        <form action="/register" method="POST">
+            <div>
+                <label for="second_name">Фамилия *:</label><br>
+                <input type="text" id="second_name" name="second_name" required>
+            </div>
+            <br>
+            <div>
+                <label for="first_name">Имя *:</label><br>
+                <input type="text" id="first_name" name="first_name" required>
+            </div>
+            <br>
+            <div>
+                <label for="middle_name">Отчество:</label><br>
+                <input type="text" id="middle_name" name="middle_name">
+            </div>
+            <br>
+            <div>
+                <label for="email">Электронная почта *:</label><br>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <br>
+            <div>
+                <label for="role_id">Роль *:</label><br>
+                <select id="role_id" name="role_id" required>
+                    {% for r in roles %}
+                        <option value="{{ r.role_id }}">{{ r.role_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <br>
+            <div>
+                <label for="group_id">Группа (для студентов):</label><br>
+                <select id="group_id" name="group_id">
+                    <option value="">Без группы</option>
+                    {% for g in groups %}
+                        <option value="{{ g.group_id }}">{{ g.group_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <br>
+            <div>
+                <label for="org_code">Код доступа (только для роли «организатор»):</label><br>
+                <input type="password" id="org_code" name="org_code" placeholder="Введите код, если регистрируетесь как организатор">
+            </div>
+            <br>
+            <button type="submit">Создать аккаунт</button>
+        </form>
+    </main>
+
+</body>
+</html>
