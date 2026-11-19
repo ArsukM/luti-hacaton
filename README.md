@@ -26,8 +26,8 @@
 ---
 
 ## К сведению
-application/app.py - **роуты flask**
-application/DB.py - **функции для работы с базой данных**
-application/DB_CONNECTION.py - **настройки подключения к базе данных через pyodbc**
-application/templates/ - **HTML-шаблоны страниц**
-application/static/css.css - **CSS шняга**
+* application/app.py - **роуты flask**
+* application/DB.py - **функции для работы с базой данных**
+* application/DB_CONNECTION.py - **настройки подключения к базе данных через pyodbc**
+* application/templates/ - **HTML-шаблоны страниц**
+* application/static/css.css - **CSS шняга**
